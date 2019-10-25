@@ -1,24 +1,23 @@
 <template>
   <div>
-    <div v-for="todo in todos"></div>
-    <h1>{{todo.title}}<h1>
+    <div v-bind:key="todo.id" v-for="todo in todos">
+      <TodoItem v-bind:todo="todo" />
+    </div>
   </div>
 </template>
 
+
 <script>
+import TodoItem from "./TodoItem.vue";
+
 export default {
   name: "Todos",
-  props: ["todos"]
+  props: ["todos"],
+  components: {
+    TodoItem
+  }
 };
 </script>
 
 <style scoped>
-.todo-item {
-  background: #f4f4f4;
-  padding: 10px;
-  border-bottom: 1px #ccc dotted;
-}
-.is-complete {
-  text-decoration: line-through;
-}
 </style>
