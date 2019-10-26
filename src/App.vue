@@ -1,37 +1,42 @@
 <template>
   <div id="app">
-    <Todos v-bind:todos="todos" />
+    <Header />
+    <Todos v-bind:todos="todos" v-on:del-todo="deleteTodo" />
+    <AddTodo v-on:add-todo="addTodo" />
   </div>
 </template>
 
 <script>
+import Header from "./components/layout/Header";
 import Todos from "./components/Todos";
+import AddTodo from "./components/AddTodo";
+import axios from "axios";
 
 export default {
   name: "app",
   components: {
-    Todos
+    Header,
+    Todos,
+    AddTodo
   },
   data() {
     return {
-      todos: [
-        {
-          id: 1,
-          title: "Todo one",
-          completed: false
-        },
-        {
-          id: 2,
-          title: "Todo two",
-          completed: true
-        },
-        {
-          id: 3,
-          title: "Todo three",
-          completed: false
-        }
-      ]
+      todos: []
     };
+  },
+  methods: {
+    deleteTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id);
+    },
+    addTodo(newTodo) {
+      this.todos = [...this.todos, newTodo];
+    },
+    created() {
+      axios
+        .get("https://jsonplaceholder.typicode.com/todos")
+        .then(res => (this.todos = res.data))
+        .catch(err => alert(err));
+    }
   }
 };
 </script>
@@ -55,6 +60,6 @@ body {
   cursor: pointer;
 }
 .btn:hover {
-  background: #666;
+  background: #777;
 }
 </style>
